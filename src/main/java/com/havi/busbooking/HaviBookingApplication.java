@@ -1,0 +1,13 @@
+package com.havi.busbooking;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class HaviBookingApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(HaviBookingApplication.class, args);
+	}
+
+}
