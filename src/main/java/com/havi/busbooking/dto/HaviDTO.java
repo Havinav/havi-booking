@@ -5,17 +5,17 @@ import java.util.List;
 
 public class HaviDTO {
 
-	   private List<String> busIds;
+	   private List<Long> busIds;
 
 	    private List<String> seatsIds;
 
 	    private LocalDateTime tripDate;
 
-		public List<String> getBusIds() {
+		public List<Long> getBusIds() {
 			return busIds;
 		}
 
-		public void setBusIds(List<String> busIds) {
+		public void setBusIds(List<Long> busIds) {
 			this.busIds = busIds;
 		}
 

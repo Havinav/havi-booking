@@ -2,7 +2,7 @@ package com.havi.busbooking.dto;
 
 public class SeatDTO {
 
-	private String id;
+	private Long id;
     private String seatId;
     private String status;
     
@@ -10,14 +10,14 @@ public class SeatDTO {
     
 	public SeatDTO(String id, String seatId, String status) {
 		super();
-		this.id = id;
+		this.id = Long.parseLong(id);
 		this.seatId = seatId;
 		this.status = status;
 	}
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getSeatId() {

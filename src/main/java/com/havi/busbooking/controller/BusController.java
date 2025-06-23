@@ -1,5 +1,7 @@
 package com.havi.busbooking.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +23,7 @@ public class BusController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> addBus(@RequestBody BusDTO busDTO) {
+	public ResponseEntity<?> addBus(@RequestBody List<BusDTO> busDTO) {
 		busService.addBus(busDTO);
 		return ResponseEntity.noContent().build();
 	}

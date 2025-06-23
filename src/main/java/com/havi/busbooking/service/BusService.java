@@ -8,11 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.havi.busbooking.dto.BusDTO;
 import com.havi.busbooking.dto.HaviDTO;
@@ -20,44 +16,55 @@ import com.havi.busbooking.dto.SeatDTO;
 import com.havi.busbooking.model.Bus;
 import com.havi.busbooking.model.Seat;
 import com.havi.busbooking.repository.BusRepository;
+import com.havi.busbooking.repository.SeatRepository;
 import com.havi.busbooking.util.BusUtil;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class BusService {
 
 	private BusRepository busRepository;
 
-	private MongoTemplate mongoTemplate;
+	private SeatRepository seatRepository;
 
 	private BusUtil busUtil;
 
-	public BusService(BusRepository busRepository, BusUtil busUtil, MongoTemplate mongoTemplate) {
+	public BusService(BusRepository busRepository, SeatRepository seatRepository, BusUtil busUtil) {
 		this.busRepository = busRepository;
+		this.seatRepository = seatRepository;
 		this.busUtil = busUtil;
-		this.mongoTemplate = mongoTemplate;
 	}
 
 	@Transactional
-	public void addBus(BusDTO busDTO) {
-		Bus bus = new Bus();
-		busDTO.setSource(busDTO.getSource().trim().toLowerCase());
-		busDTO.setDestination(busDTO.getDestination().trim().toLowerCase());
+	public void addBus(List<BusDTO> busDTO) {
 
-		BeanUtils.copyProperties(busDTO, bus);
+		List<Bus> busList = new ArrayList<>();
 
-		busRepository.save(bus);
+		busDTO.forEach(bus -> {
+			Bus busModel = new Bus();
+			BeanUtils.copyProperties(bus, busModel);
+			busModel.setSource(bus.getSource().trim().toLowerCase());
+			busModel.setDestination(bus.getDestination().trim().toLowerCase());
+
+			busList.add(busModel);
+		});
+
+		busRepository.saveAll(busList);
+
 	}
 
 	public List<BusDTO> getBusInfo(String source, String destination, LocalDateTime tripDate) {
 		List<BusDTO> busDTOList = new ArrayList<>();
 
-		List<Bus> busList = getBuesWithSourceDestination(source, destination, null);
+		List<Bus> busList = busRepository.findBySourceAndDestination(source.trim().toLowerCase(),
+				destination.trim().toLowerCase());
 
 		busList.forEach(bus -> {
 			BusDTO busDTO = new BusDTO();
 
-			bus.setSource(source.substring(0, 1).toUpperCase() + source.substring(1));
-			bus.setDestination(destination.substring(0, 1).toUpperCase() + destination.substring(1));
+			bus.setSource(source);
+			bus.setDestination(destination);
 			bus.setBusStartDate(tripDate);
 			bus.setBusEndDate(tripDate.plusDays(1));
 			BeanUtils.copyProperties(bus, busDTO);
@@ -72,13 +79,13 @@ public class BusService {
 						seatMap.put(seatDTO.getSeatId(), seatDTO);
 					}
 				});
-				// bus.clearSeats();
+				bus.clearSeats();
 				busDTO.setSeatsDTOList(new ArrayList<>(seatMap.values()));
 				busDTOList.add(busDTO);
 				seatMap.clear();
 			} else {
 				Map<String, SeatDTO> seatMap = getSeatMap();
-				// bus.clearSeats();
+				bus.clearSeats();
 				busDTO.setSeatsDTOList(new ArrayList<>(seatMap.values()));
 
 				busDTOList.add(busDTO);
@@ -97,32 +104,12 @@ public class BusService {
 
 	}
 
-	private List<Bus> getBuesWithSourceDestination(String source, String destination,List<String> busIds) {
-
-		Query query = new Query();
-
-		if(source != null && destination != null) {
-			query.addCriteria(new Criteria().orOperator(
-					Criteria.where("source").regex(".*" + source.toLowerCase().trim() + ".*", "i"),
-					Criteria.where("destination").regex(".*" + destination.toLowerCase().trim() + ".*", "i"))
-
-			);
-		}else if (!busIds.isEmpty()) {
-			new Criteria();
-			query.addCriteria(
-              Criteria.where("id").in(busIds));
-		} 
-
-		return mongoTemplate.find(query, Bus.class);
-
-	}
-
 	public String bookSeat(HaviDTO haviDTO) {
 
-		List<Bus> busList = getBuesWithSourceDestination(null, null, haviDTO.getBusIds());
+		List<Bus> busList = busRepository.findBusByIds(haviDTO.getBusIds());
 
 		busList.forEach(bus -> {
-
+			bus.clearSeats();
 			List<Seat> seatList = new ArrayList<>();
 
 			busUtil.getSeatDTOList().forEach(seatDTO -> {
@@ -142,6 +129,5 @@ public class BusService {
 
 		return "Seats booking successfully";
 	}
-
 
 }

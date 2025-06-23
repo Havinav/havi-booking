@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BusDTO {
 
-	private String id;
+	private Long id;
 	private String busName;
 	private String busNo;
 	private String busType;
@@ -22,11 +22,11 @@ public class BusDTO {
 	private LocalDateTime tripDate;
 	private List<SeatDTO> seatsDTOList;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
