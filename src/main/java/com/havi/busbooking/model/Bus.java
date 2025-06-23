@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +34,7 @@ public class Bus {
     private Double price;
     private String rating;
 
-    @ElementCollection
+  
     private List<String> amenities;
 
     private LocalDateTime busStartDate;
