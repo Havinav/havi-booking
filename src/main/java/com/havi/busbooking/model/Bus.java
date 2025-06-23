@@ -34,7 +34,6 @@ public class Bus {
     private Double price;
     private String rating;
 
-  
     private List<String> amenities;
 
     private LocalDateTime busStartDate;
