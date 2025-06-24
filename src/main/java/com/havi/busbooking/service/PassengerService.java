@@ -2,6 +2,12 @@ package com.havi.busbooking.service;
 
 
 
+<<<<<<< HEAD
+=======
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+>>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
 import java.util.List;
 import java.util.UUID;
 
@@ -41,12 +47,19 @@ public class PassengerService {
             passenger.setUserId(haviDTO.getUserId());
             passenger.setPaymentId(haviDTO.getPaymentId());
             passenger.setPaymentStatus(haviDTO.getPaymentStatus());
+<<<<<<< HEAD
             //passenger.setJouneryStatus("WAITING");
+=======
+            passenger.setJouneryStatus("WAITING");
+>>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
             passenger.setTripDate(haviDTO.getTripDate());
             passenger.setSource(passengerDTO.getSource());
             passenger.setDestination(passengerDTO.getDestination());
             passenger.setPrice(haviDTO.getPrice());
+<<<<<<< HEAD
           
+=======
+>>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
             passengereRepository.save(passenger);
         });
 
