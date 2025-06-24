@@ -17,7 +17,7 @@ public class UserService {
 
     public String addUser(User user) {
         if(userRepository.findByUserName(user.getEmail()) != null) {
-            return "Email already exists";
+            return "Email";
         }
         user.setRole("USER");
         user.setEmail(user.getEmail().toLowerCase());

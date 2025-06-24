@@ -16,11 +16,6 @@ import com.havi.busbooking.dto.SeatDTO;
 import com.havi.busbooking.model.Bus;
 import com.havi.busbooking.model.Seat;
 import com.havi.busbooking.repository.BusRepository;
-import com.havi.busbooking.repository.SeatRepository;
-<<<<<<< HEAD
-=======
-import com.havi.busbooking.util.BusUtil;
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
 
 import jakarta.transaction.Transactional;
 
@@ -29,24 +24,9 @@ public class BusService {
 
 	private BusRepository busRepository;
 
-	private SeatRepository seatRepository;
 
-<<<<<<< HEAD
-	
-
-	public BusService(BusRepository busRepository, SeatRepository seatRepository) {
+	public BusService(BusRepository busRepository) {
 		this.busRepository = busRepository;
-		this.seatRepository = seatRepository;
-		
-	
-=======
-	private BusUtil busUtil;
-
-	public BusService(BusRepository busRepository, SeatRepository seatRepository, BusUtil busUtil) {
-		this.busRepository = busRepository;
-		this.seatRepository = seatRepository;
-		this.busUtil = busUtil;
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
 	}
 
 	@Transactional
@@ -74,73 +54,42 @@ public class BusService {
 				destination.trim().toLowerCase());
 
 		busList.forEach(bus -> {
-			BusDTO busDTO = new BusDTO();
 
-			bus.setSource(source);
-			bus.setDestination(destination);
-			bus.setBusStartDate(tripDate);
-			bus.setBusEndDate(tripDate.plusDays(1));
+			BusDTO busDTO = new BusDTO();
 			BeanUtils.copyProperties(bus, busDTO);
+			busDTO.setTripDate(tripDate);
+			busDTO.setSource(source);
+			busDTO.setDestination(destination);
 
 			if (Objects.nonNull(bus.getTripDate()) && bus.getTripDate().isEqual(tripDate)) {
-<<<<<<< HEAD
 				Map<String, SeatDTO> seatMap = getSeatDTOMap();
-
-=======
-				Map<String, SeatDTO> seatMap = getSeatMap();
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
 				bus.getSeats().forEach(seat -> {
-
 					SeatDTO seatDTO = seatMap.get(seat.getSeatId());
 					if (Objects.nonNull(seatDTO)) {
 						seatDTO.setStatus(seat.getStatus());
 						seatMap.put(seatDTO.getSeatId(), seatDTO);
 					}
-				});
-<<<<<<< HEAD
 
-=======
-				bus.clearSeats();
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
+				});
 				busDTO.setSeatsDTOList(new ArrayList<>(seatMap.values()));
 				busDTOList.add(busDTO);
 				seatMap.clear();
 			} else {
-<<<<<<< HEAD
-
 				busDTO.setSeatsDTOList(new ArrayList<>(getSeatDTOMap().values()));
-=======
-				Map<String, SeatDTO> seatMap = getSeatMap();
-				bus.clearSeats();
-				busDTO.setSeatsDTOList(new ArrayList<>(seatMap.values()));
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
-
 				busDTOList.add(busDTO);
 			}
+
 		});
 
 		return busDTOList;
 	}
 
-<<<<<<< HEAD
-	@Transactional
-=======
-	private Map<String, SeatDTO> getSeatMap() {
-		Map<String, SeatDTO> seatsMap = new LinkedHashMap<>();
-		busUtil.getSeatDTOList().forEach(seatDTO -> {
-			seatsMap.put(seatDTO.getSeatId(), seatDTO);
-		});
-		return seatsMap;
-
-	}
-
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
 	public String bookSeat(HaviDTO haviDTO) {
 
 		List<Bus> busList = busRepository.findBusByIds(haviDTO.getBusIds());
+		List<Seat> seatList = new ArrayList<>();
 
 		busList.forEach(bus -> {
-<<<<<<< HEAD
 
 			haviDTO.getSeatsIds().forEach(seatId -> {
 				SeatDTO seat = getSeatDTOMap().get(seatId);
@@ -150,65 +99,45 @@ public class BusService {
 					seatModel.setStatus("Booked");
 					seatModel.setBus(bus);
 
-					seatRepository.save(seatModel);
+					seatList.add(seatModel);
 				}
 			});
-
-			bus.setTripDate(haviDTO.getTripDate());
-			busRepository.save(bus);
-=======
-			bus.clearSeats();
-			List<Seat> seatList = new ArrayList<>();
-
-			busUtil.getSeatDTOList().forEach(seatDTO -> {
-				if (haviDTO.getSeatsIds().contains(seatDTO.getSeatId())) {
-					Seat seat = new Seat();
-					seat.setSeatId(seatDTO.getSeatId());
-					seat.setStatus("Booked");
-					seat.setBus(bus);
-					seatList.add(seat);
-				}
-			});
+     
 			bus.setSeats(seatList);
 			bus.setTripDate(haviDTO.getTripDate());
 			busRepository.save(bus);
 
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
 		});
 
 		return "Seats booking successfully";
 	}
-<<<<<<< HEAD
-	
+
 	private Map<String, SeatDTO> getSeatDTOMap() {
-		
+
 		Map<String, SeatDTO> seatDTOMap = new LinkedHashMap<>();
-		
+
 		seatDTOMap.put("B1", new SeatDTO("1", "B1", "Available"));
 		seatDTOMap.put("B3", new SeatDTO("2", "B3", "Available"));
 		seatDTOMap.put("B5", new SeatDTO("3", "B5", "Available"));
 		seatDTOMap.put("B7", new SeatDTO("4", "B7", "Available"));
 		seatDTOMap.put("B9", new SeatDTO("5", "B9", "Available"));
 		seatDTOMap.put("B11", new SeatDTO("6", "B11", "Available"));
-		
+
 		seatDTOMap.put("B2", new SeatDTO("7", "B2", "Available"));
 		seatDTOMap.put("B4", new SeatDTO("8", "B4", "Available"));
 		seatDTOMap.put("B6", new SeatDTO("9", "B6", "Available"));
 		seatDTOMap.put("B8", new SeatDTO("10", "B8", "Available"));
 		seatDTOMap.put("B10", new SeatDTO("11", "B10", "Available"));
 		seatDTOMap.put("B12", new SeatDTO("12", "B12", "Available"));
-		
+
 		seatDTOMap.put("A1", new SeatDTO("13", "A1", "Available"));
 		seatDTOMap.put("A2", new SeatDTO("14", "A2", "Available"));
 		seatDTOMap.put("A3", new SeatDTO("15", "A3", "Available"));
 		seatDTOMap.put("A4", new SeatDTO("16", "A4", "Available"));
 		seatDTOMap.put("A5", new SeatDTO("17", "A5", "Available"));
 		seatDTOMap.put("A6", new SeatDTO("18", "A6", "Available"));
-		
-		
+
 		return seatDTOMap;
 	}
-=======
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
 
 }

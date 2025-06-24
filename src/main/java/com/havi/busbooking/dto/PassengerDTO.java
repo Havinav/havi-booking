@@ -31,11 +31,9 @@ public class PassengerDTO {
     private String paymentStatus;
 
     private  double price;
-<<<<<<< HEAD
+
     
     private BusDTO busDTO;
-=======
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
 
     public Integer getId() {
         return id;

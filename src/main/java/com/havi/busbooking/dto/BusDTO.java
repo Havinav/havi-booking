@@ -16,11 +16,9 @@ public class BusDTO {
 	private String arrivalTime;
 	private Double price;
 	private String rating;
-<<<<<<< HEAD
+
 	private String amenities;
-=======
-	private List<String> amenities;
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
+
 	private LocalDateTime busStartDate;
 	private LocalDateTime busEndDate;
 	private LocalDateTime tripDate;
@@ -114,19 +112,13 @@ public class BusDTO {
 		this.rating = rating;
 	}
 
-<<<<<<< HEAD
+
 	public String getAmenities() {
 		return amenities;
 	}
 
 	public void setAmenities(String amenities) {
-=======
-	public List<String> getAmenities() {
-		return amenities;
-	}
 
-	public void setAmenities(List<String> amenities) {
->>>>>>> 25e017cedb7c893c4c4de5571df215836756b255
 		this.amenities = amenities;
 	}
 

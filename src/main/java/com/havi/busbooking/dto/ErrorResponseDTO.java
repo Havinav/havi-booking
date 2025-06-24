@@ -1,4 +1,4 @@
-package com.havi.busbooking.model;
+package com.havi.busbooking.dto;
 
 public class ErrorResponseDTO {
 

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.havi.busbooking.model.ErrorResponseDTO;
+import com.havi.busbooking.dto.ErrorResponseDTO;
 import com.havi.busbooking.model.User;
 import com.havi.busbooking.service.UserService;
 
@@ -24,7 +24,17 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> addUser(@RequestBody User user) {
-       return ResponseEntity.ok(userService.addUser(user));
+    	String msg = userService.addUser(user);
+    	
+    	if(msg.equals("Email")) {
+    		  return  ResponseEntity
+    					.status(HttpStatus.NO_CONTENT)
+    					.body(new ErrorResponseDTO(204, "Created", msg));
+    	}
+    	
+       return  ResponseEntity
+				.status(HttpStatus.OK)
+				.body(new ErrorResponseDTO(200, "Created", msg));
     }
 
     @PostMapping("/login")
