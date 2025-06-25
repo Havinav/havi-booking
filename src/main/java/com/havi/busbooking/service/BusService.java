@@ -60,6 +60,8 @@ public class BusService {
 			busDTO.setTripDate(tripDate);
 			busDTO.setSource(source);
 			busDTO.setDestination(destination);
+			busDTO.setBusStartDate(tripDate);
+			busDTO.setBusEndDate(tripDate.plusDays(1));
 
 			if (Objects.nonNull(bus.getTripDate()) && bus.getTripDate().isEqual(tripDate)) {
 				Map<String, SeatDTO> seatMap = getSeatDTOMap();
